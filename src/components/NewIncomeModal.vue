@@ -1,10 +1,28 @@
 <script setup>
+import useTransactions from '../composables/useTransactions'
 import BodyExpendIncomeModal from './BodyExpendIncomeModal.vue'
 
-defineEmits(['close', 'add'])
+const props = defineProps({
+  totalMoney: {
+    type: Number,
+    required: true,
+  },
+})
+const emit = defineEmits(['close', 'update'])
 
-const addIncomeMoney = value => {
+const { createTransaction } = useTransactions()
+
+const addIncomeMoney = async value => {
   console.log(value)
+  const transactionData = {
+    date: value.expendDate,
+    money: +value.money,
+    total: props.totalMoney + +value.money,
+    note: value.notes,
+  }
+  await createTransaction(transactionData)
+  emit('update')
+  emit('close')
 }
 </script>
 

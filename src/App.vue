@@ -6,11 +6,19 @@ import TableActionsButtons from '@/components/TableActionsButtons.vue'
 import NewExpendModal from '@/components/NewExpendModal.vue'
 import NewIncomeModal from '@/components/NewIncomeModal.vue'
 import { ref } from 'vue'
+import useTransactions from '@/composables/useTransactions'
 
-const totalMoney = ref(1000)
+const { listTransactions } = useTransactions()
+
+const totalMoney = ref(null)
+const transactions = ref([])
 const shouldShowExpendModal = ref(false)
 const shouldShowIncomeModal = ref(false)
 
+const loadTransactions = async () => {
+  transactions.value = await listTransactions()
+  totalMoney.value = transactions.value[0].total
+}
 const showExpendModal = () => {
   shouldShowExpendModal.value = true
 }
@@ -23,6 +31,8 @@ const showIncomeModal = () => {
 const closeIncomeModal = () => {
   shouldShowIncomeModal.value = false
 }
+
+loadTransactions()
 </script>
 
 <template>
@@ -38,11 +48,21 @@ const closeIncomeModal = () => {
       </div>
     </section>
     <section class="mt-10">
-      <CompactTable />
+      <CompactTable :items="transactions" />
     </section>
 
-    <NewExpendModal v-if="shouldShowExpendModal" @close="closeExpendModal" />
-    <NewIncomeModal v-if="shouldShowIncomeModal" @close="closeIncomeModal" />
+    <NewExpendModal
+      v-if="shouldShowExpendModal"
+      :total-money="totalMoney"
+      @close="closeExpendModal"
+      @update="loadTransactions"
+    />
+    <NewIncomeModal
+      v-if="shouldShowIncomeModal"
+      :total-money="totalMoney"
+      @close="closeIncomeModal"
+      @update="loadTransactions"
+    />
   </main>
 </template>
 
