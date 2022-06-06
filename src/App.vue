@@ -1,25 +1,48 @@
 <script setup>
 import BaseStat from '@/components/BaseStat.vue'
-import SwapTheme from './components/SwapTheme.vue'
-import CompactTable from './components/CompactTable.vue'
+import BaseHeader from '@/components/BaseHeader.vue'
+import CompactTable from '@/components/CompactTable.vue'
 import TableActionsButtons from '@/components/TableActionsButtons.vue'
+import NewExpendModal from '@/components/NewExpendModal.vue'
+import NewIncomeModal from '@/components/NewIncomeModal.vue'
+import { ref } from 'vue'
+
+const totalMoney = ref(1000)
+const shouldShowExpendModal = ref(false)
+const shouldShowIncomeModal = ref(false)
+
+const showExpendModal = () => {
+  shouldShowExpendModal.value = true
+}
+const closeExpendModal = () => {
+  shouldShowExpendModal.value = false
+}
+const showIncomeModal = () => {
+  shouldShowIncomeModal.value = true
+}
+const closeIncomeModal = () => {
+  shouldShowIncomeModal.value = false
+}
 </script>
 
 <template>
-  <header class="p-6 border-b-2 flex justify-between items-center">
-    <h1 class="font-bold uppercase">MoneyTory</h1>
-    <SwapTheme />
-  </header>
+  <BaseHeader />
   <main class="m-6">
     <section class="flex justify-between items-center">
-      <BaseStat title="Dinero total" value="1000" />
+      <BaseStat title="Dinero total" :value="totalMoney" />
       <div>
-        <TableActionsButtons />
+        <TableActionsButtons
+          @expend="showExpendModal"
+          @income="showIncomeModal"
+        />
       </div>
     </section>
     <section class="mt-10">
       <CompactTable />
     </section>
+
+    <NewExpendModal v-if="shouldShowExpendModal" @close="closeExpendModal" />
+    <NewIncomeModal v-if="shouldShowIncomeModal" @close="closeIncomeModal" />
   </main>
 </template>
 

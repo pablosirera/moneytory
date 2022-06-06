@@ -1,7 +1,12 @@
-<script setup></script>
+<script setup>
+defineEmits(['expend', 'income'])
+</script>
 
 <template>
-  <button class="btn btn-circle btn-outline btn-error mr-6">
+  <button
+    class="btn btn-circle btn-outline btn-error mr-6"
+    @click="$emit('expend')"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -17,7 +22,10 @@
       <line x1="5" y1="12" x2="19" y2="12" />
     </svg>
   </button>
-  <button class="btn btn-circle btn-success btn-outline">
+  <button
+    class="btn btn-circle btn-success btn-outline"
+    @click="$emit('income')"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"

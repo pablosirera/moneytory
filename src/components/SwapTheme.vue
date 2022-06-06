@@ -1,6 +1,5 @@
 <script setup>
 const changeTheme = event => {
-  console.log(event.target.checked)
   const { checked } = event.target
 
   document
