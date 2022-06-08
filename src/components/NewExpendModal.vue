@@ -16,7 +16,7 @@ const addExpendMoney = async value => {
   const transactionData = {
     date: value.expendDate,
     money: +`-${value.money}`,
-    total: props.totalMoney - +`-${value.money}`,
+    total: +props.totalMoney + +`-${value.money}`,
     note: value.notes,
   }
   await createTransaction(transactionData)
