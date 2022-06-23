@@ -5,16 +5,20 @@ import CompactTable from '@/components/CompactTable.vue'
 import TableActionsButtons from '@/components/TableActionsButtons.vue'
 import NewExpendModal from '@/components/NewExpendModal.vue'
 import NewIncomeModal from '@/components/NewIncomeModal.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import useTransactions from '@/composables/useTransactions'
 
 const { listTransactions } = useTransactions()
 
 const totalMoney = ref(null)
+const idealMoney = ref(1000)
 const transactions = ref([])
 const shouldShowExpendModal = ref(false)
 const shouldShowIncomeModal = ref(false)
 
+const typeTextTotalMoney = computed(() => {
+  return totalMoney.value >= idealMoney.value ? 'accent' : 'error'
+})
 const loadTransactions = async () => {
   transactions.value = await listTransactions()
   totalMoney.value = transactions.value[0].total
@@ -39,7 +43,20 @@ loadTransactions()
   <BaseHeader />
   <main class="m-6">
     <section class="flex justify-between items-center">
-      <BaseStat title="Dinero total" :value="totalMoney" />
+      <div>
+        <BaseStat
+          v-if="totalMoney"
+          :value="totalMoney"
+          title="Dinero total"
+          class="mr-4"
+          :type-text="typeTextTotalMoney"
+        />
+        <BaseStat
+          title="Dinero ideal"
+          :value="idealMoney"
+          type-text="secondary"
+        />
+      </div>
       <div>
         <TableActionsButtons
           @expend="showExpendModal"

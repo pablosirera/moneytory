@@ -1,0 +1,9 @@
+.text-secondary {
+  color: theme('colors.secondary')
+}
+.text-accent {
+  color: theme('colors.accent');
+}
+.text-error {
+  color: theme('colors.error');
+}
